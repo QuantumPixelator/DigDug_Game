@@ -25,6 +25,8 @@ At the start of each level, a `Level X` intro card is shown for 5 seconds, then 
 -   **Arrow Keys:** Move up, down, left, and right.
 -   **Spacebar:** Shoot your harpoon and pump up enemies.
 -   **P:** Pause/resume gameplay.
+-   **X:** Toggle monster freeze cheat.
+-   **J:** Debug shortcut to jump directly to Level 10.
 
 Have fun!
 

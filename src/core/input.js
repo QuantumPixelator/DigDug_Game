@@ -10,7 +10,8 @@ export class InputController {
         };
         this.pendingActions = {
             togglePause: false,
-            toggleMonsterFreeze: false
+            toggleMonsterFreeze: false,
+            jumpToFinalLevel: false
         };
 
         this.onKeyDown = this.onKeyDown.bind(this);
@@ -25,6 +26,11 @@ export class InputController {
 
         if ((event.key === 'x' || event.key === 'X') && !event.repeat) {
             this.pendingActions.toggleMonsterFreeze = true;
+            return;
+        }
+
+        if ((event.key === 'j' || event.key === 'J') && !event.repeat) {
+            this.pendingActions.jumpToFinalLevel = true;
             return;
         }
 

@@ -1,4 +1,4 @@
-import { Grid, CELL_SIZE } from '../world/grid.js';
+import { Grid, CELL_SIZE, GRID_WIDTH, GRID_HEIGHT } from '../world/grid.js';
 import { Player } from '../entities/player.js';
 import { Enemy } from '../entities/enemy.js';
 import { Rock } from '../entities/rock.js';
@@ -35,11 +35,18 @@ export class Game {
         this.isPlaying = false;
         this.isPaused = false;
         this.monstersFrozen = false;
+        this.finalLevel = 10;
         this.lastTimestamp = 0;
         this.levelIntro = {
             active: false,
             timer: 0,
             level: this.level
+        };
+        this.winSequence = {
+            active: false,
+            timer: 0,
+            holdMs: 10000,
+            fadeMs: 1000
         };
 
         this.input = new InputController(window);
@@ -62,6 +69,10 @@ export class Game {
     }
 
     processInputActions() {
+        if (this.winSequence.active) {
+            return;
+        }
+
         if (this.input.consumeAction('togglePause') && this.isPlaying && !this.levelIntro.active) {
             this.isPaused = !this.isPaused;
         }
@@ -74,6 +85,152 @@ export class Game {
                     enemy.fire = null;
                 });
             }
+        }
+
+        if (this.input.consumeAction('jumpToFinalLevel')) {
+            this.level = this.finalLevel;
+            this.monstersFrozen = false;
+            this.isPaused = false;
+            this.isPlaying = true;
+            this.resetLevel();
+        }
+    }
+
+    getTargetCountForLevel(level) {
+        if (level >= 10) return 10;
+        if (level >= 8) return 8;
+        if (level >= 6) return 6;
+        if (level >= 4) return 4;
+        if (level >= 2) return 3;
+        return 2;
+    }
+
+    getRandomGridCell() {
+        return {
+            x: Math.floor(Math.random() * GRID_WIDTH),
+            y: Math.floor(Math.random() * GRID_HEIGHT)
+        };
+    }
+
+    buildLevelRockCells(targetCount) {
+        const playerStartX = Math.floor(this.settings.playerSpawn.x / CELL_SIZE);
+        const playerStartY = Math.floor(this.settings.playerSpawn.y / CELL_SIZE);
+        const startTunnelX = this.settings.startTunnel.x;
+        const startTunnelY = this.settings.startTunnel.y;
+        const key = cell => `${cell.x},${cell.y}`;
+
+        const rocks = [];
+        const used = new Set();
+
+        this.settings.gridRockCells.forEach(cell => {
+            if (rocks.length >= targetCount) return;
+            if ((cell.x === playerStartX && cell.y === playerStartY) || (cell.x === startTunnelX && cell.y === startTunnelY)) {
+                return;
+            }
+            const cellKey = key(cell);
+            if (!used.has(cellKey)) {
+                used.add(cellKey);
+                rocks.push({ x: cell.x, y: cell.y });
+            }
+        });
+
+        let attempts = 0;
+        const maxAttempts = 1000;
+        while (rocks.length < targetCount && attempts < maxAttempts) {
+            attempts++;
+            const candidate = this.getRandomGridCell();
+
+            if ((candidate.x === playerStartX && candidate.y === playerStartY) || (candidate.x === startTunnelX && candidate.y === startTunnelY)) {
+                continue;
+            }
+
+            const candidateKey = key(candidate);
+            if (used.has(candidateKey)) {
+                continue;
+            }
+
+            used.add(candidateKey);
+            rocks.push(candidate);
+        }
+
+        return rocks;
+    }
+
+    buildLevelEnemySpawns(targetCount, rockCells) {
+        const key = cell => `${cell.x},${cell.y}`;
+        const playerStartX = Math.floor(this.settings.playerSpawn.x / CELL_SIZE);
+        const playerStartY = Math.floor(this.settings.playerSpawn.y / CELL_SIZE);
+        const blockedCells = new Set(rockCells.map(cell => key(cell)));
+        blockedCells.add(key({ x: playerStartX, y: playerStartY }));
+
+        const spawns = [];
+        const used = new Set();
+
+        this.settings.enemySpawns.forEach(spawn => {
+            if (spawns.length >= targetCount) return;
+
+            const gridX = Math.floor(spawn.x / CELL_SIZE);
+            const gridY = Math.floor(spawn.y / CELL_SIZE);
+            const spawnKey = key({ x: gridX, y: gridY });
+            if (blockedCells.has(spawnKey) || used.has(spawnKey)) {
+                return;
+            }
+
+            used.add(spawnKey);
+            spawns.push({
+                x: gridX * CELL_SIZE,
+                y: gridY * CELL_SIZE,
+                type: spawn.type
+            });
+        });
+
+        let attempts = 0;
+        const maxAttempts = 1000;
+        while (spawns.length < targetCount && attempts < maxAttempts) {
+            attempts++;
+            const candidate = this.getRandomGridCell();
+            const candidateKey = key(candidate);
+
+            if (blockedCells.has(candidateKey) || used.has(candidateKey)) {
+                continue;
+            }
+
+            used.add(candidateKey);
+            spawns.push({
+                x: candidate.x * CELL_SIZE,
+                y: candidate.y * CELL_SIZE,
+                type: Math.random() < 0.5 ? 'pooka' : 'fygar'
+            });
+        }
+
+        return spawns;
+    }
+
+    activateWinSequence() {
+        this.winSequence.active = true;
+        this.winSequence.timer = 0;
+        this.levelIntro.active = false;
+        this.isPlaying = false;
+        this.isPaused = false;
+    }
+
+    updateWinSequence(deltaTime) {
+        if (!this.winSequence.active) return;
+
+        this.winSequence.timer += deltaTime;
+        const totalDuration = this.winSequence.holdMs + this.winSequence.fadeMs;
+
+        if (this.winSequence.timer >= totalDuration) {
+            this.winSequence.active = false;
+            this.winSequence.timer = 0;
+            this.level = 1;
+            this.score.reset();
+            this.settings = getGameSettings();
+            this.hud.lives = this.settings.defaultLives;
+            this.monstersFrozen = false;
+            this.resetLevel();
+            this.isPlaying = true;
+            this.isPaused = false;
         }
     }
 
@@ -108,12 +265,16 @@ export class Game {
     resetLevel() {
         this.settings = getGameSettings();
         this.hud.level = this.level;
+        const targetCount = this.getTargetCountForLevel(this.level);
+        const rockCells = this.buildLevelRockCells(targetCount);
+        const enemySpawns = this.buildLevelEnemySpawns(targetCount, rockCells);
+
         this.grid = new Grid({
-            rockCells: this.settings.gridRockCells,
+            rockCells,
             startTunnel: this.settings.startTunnel
         });
         this.player = new Player(this.settings.playerSpawn.x, this.settings.playerSpawn.y);
-        this.enemies = this.settings.enemySpawns.map(spawn => new Enemy(spawn.x, spawn.y, spawn.type));
+        this.enemies = enemySpawns.map(spawn => new Enemy(spawn.x, spawn.y, spawn.type));
 
         this.rocks = [];
         for (let y = 0; y < this.grid.grid.length; y++) {
@@ -180,8 +341,12 @@ export class Game {
         }
 
         if (allEnemiesResolved) {
-            this.level++;
-            this.resetLevel();
+            if (this.level >= this.finalLevel) {
+                this.activateWinSequence();
+            } else {
+                this.level++;
+                this.resetLevel();
+            }
         }
     }
 
@@ -202,6 +367,37 @@ export class Game {
         if (this.isPaused) {
             this.renderPauseBanner();
         }
+
+        if (this.winSequence.active) {
+            this.renderWinBanner();
+        }
+    }
+
+    renderWinBanner() {
+        let alpha = 1;
+        if (this.winSequence.timer > this.winSequence.holdMs) {
+            const fadeProgress = (this.winSequence.timer - this.winSequence.holdMs) / this.winSequence.fadeMs;
+            alpha = Math.max(0, 1 - fadeProgress);
+        }
+
+        this.ctx.save();
+        this.ctx.fillStyle = `rgba(0, 0, 0, ${0.75 * alpha})`;
+        this.ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+
+        this.ctx.fillStyle = `rgba(255, 236, 120, ${alpha})`;
+        this.ctx.strokeStyle = `rgba(120, 70, 0, ${alpha})`;
+        this.ctx.lineWidth = 2;
+        this.ctx.font = 'bold 34px "Trebuchet MS", "Segoe UI", sans-serif';
+        this.ctx.strokeText('YOU WIN!', GAME_WIDTH / 2, GAME_HEIGHT / 2 - 12);
+        this.ctx.fillText('YOU WIN!', GAME_WIDTH / 2, GAME_HEIGHT / 2 - 12);
+
+        this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        this.ctx.font = 'bold 12px "Segoe UI", Tahoma, sans-serif';
+        this.ctx.fillText('Great digging, hero!', GAME_WIDTH / 2, GAME_HEIGHT / 2 + 16);
+        this.ctx.restore();
     }
 
     renderLevelIntro() {
@@ -252,6 +448,13 @@ export class Game {
         this.lastTimestamp = timestamp;
 
         this.processInputActions();
+
+        if (this.winSequence.active) {
+            this.updateWinSequence(deltaTime);
+            this.render();
+            requestAnimationFrame(this.gameLoop);
+            return;
+        }
 
         if (this.isPlaying && this.levelIntro.active) {
             this.updateLevelIntro(deltaTime);
