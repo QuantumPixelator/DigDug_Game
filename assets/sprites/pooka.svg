@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <!-- Organic / Fleshy Body Gradient -->
+    <radialGradient id="pookaBody" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ff9999"/>
+      <stop offset="30%" stop-color="#ff3333"/>
+      <stop offset="75%" stop-color="#990000"/>
+      <stop offset="100%" stop-color="#4a0000"/>
+    </radialGradient>
+    <radialGradient id="pookaEyeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#ffff00"/>
+      <stop offset="100%" stop-color="#cc8800"/>
+    </radialGradient>
+    <linearGradient id="brassGoggles" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffeeaa"/>
+      <stop offset="20%" stop-color="#d4af37"/>
+      <stop offset="50%" stop-color="#aa7700"/>
+      <stop offset="80%" stop-color="#885500"/>
+      <stop offset="100%" stop-color="#442200"/>
+    </linearGradient>
+    <filter id="pookaShadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#pookaShadow)">
+    <!-- Horns / Tubes (Mechanical-looking) -->
+    <path d="M 30 25 C 20 0, 5 10, 15 25" fill="none" stroke="url(#brassGoggles)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 30 25 C 20 0, 5 10, 15 25" fill="none" stroke="#ffeeaa" stroke-width="2" stroke-linecap="round"/>
+    
+    <path d="M 70 25 C 80 0, 95 10, 85 25" fill="none" stroke="url(#brassGoggles)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 70 25 C 80 0, 95 10, 85 25" fill="none" stroke="#ffeeaa" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Feet -->
+    <path d="M 35 75 Q 20 98, 40 95 Q 48 85, 45 75 Z" fill="#550000" stroke="#220000" stroke-width="2"/>
+    <path d="M 65 75 Q 80 98, 60 95 Q 52 85, 55 75 Z" fill="#550000" stroke="#220000" stroke-width="2"/>
+    <!-- Claws -->
+    <polygon points="25,95 22,100 28,96" fill="#fff"/>
+    <polygon points="32,96 30,102 36,97" fill="#fff"/>
+    <polygon points="75,95 78,100 72,96" fill="#fff"/>
+    <polygon points="68,96 70,102 64,97" fill="#fff"/>
+
+    <!-- Main Bloated Body -->
+    <circle cx="50" cy="52" r="38" fill="url(#pookaBody)" stroke="#3a0000" stroke-width="2"/>
+    
+    <!-- Body Highlights & Veins -->
+    <path d="M 20 40 Q 25 30, 40 22" fill="none" stroke="#ffcccc" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+    <path d="M 80 60 Q 85 70, 70 80" fill="none" stroke="#550000" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+
+    <!-- Goggle Strap -->
+    <path d="M 12 44 Q 50 50, 88 44" fill="none" stroke="#222" stroke-width="10" stroke-linecap="square"/>
+    <path d="M 12 44 Q 50 50, 88 44" fill="none" stroke="#444" stroke-width="4" stroke-linecap="square" stroke-dasharray="2, 4"/>
+
+    <!-- Goggle Frames -->
+    <circle cx="34" cy="46" r="18" fill="#111" stroke="url(#brassGoggles)" stroke-width="5"/>
+    <circle cx="66" cy="46" r="18" fill="#111" stroke="url(#brassGoggles)" stroke-width="5"/>
+    
+    <!-- Bridge -->
+    <rect x="48" y="42" width="4" height="8" fill="url(#brassGoggles)"/>
+    <rect x="49" y="42" width="2" height="8" fill="#ffeeaa"/>
+
+    <!-- Glowing Lenses -->
+    <circle cx="34" cy="46" r="14" fill="url(#pookaEyeGlow)"/>
+    <circle cx="66" cy="46" r="14" fill="url(#pookaEyeGlow)"/>
+    
+    <!-- Slit Pupils (Reptilian/Creepy) -->
+    <ellipse cx="34" cy="46" rx="3" ry="8" fill="#330000"/>
+    <ellipse cx="66" cy="46" rx="3" ry="8" fill="#330000"/>
+
+    <!-- Goggle Glass Reflection -->
+    <path d="M 24 38 Q 34 32, 44 42" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 56 38 Q 66 32, 76 42" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+
+    <!-- Mouth (Small creepy toothy maw) -->
+    <path d="M 45 75 Q 50 80, 55 75" fill="none" stroke="#220000" stroke-width="3"/>
+    <polygon points="48,76 50,80 52,76" fill="#ffffff"/>
+  </g>
+</svg>

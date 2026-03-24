@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <!-- Complex Gradients for Shading -->
+    <radialGradient id="helmetGlow" cx="40%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#eeeeee"/>
+      <stop offset="85%" stop-color="#999999"/>
+      <stop offset="100%" stop-color="#555555"/>
+    </radialGradient>
+    <linearGradient id="visorReflect" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#aaffff"/>
+      <stop offset="30%" stop-color="#00ddff"/>
+      <stop offset="70%" stop-color="#0066cc"/>
+      <stop offset="100%" stop-color="#002266"/>
+    </linearGradient>
+    <linearGradient id="suitArmor" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#e6e6e6"/>
+      <stop offset="50%" stop-color="#cccccc"/>
+      <stop offset="100%" stop-color="#777777"/>
+    </linearGradient>
+    <linearGradient id="blueTrim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4488ff"/>
+      <stop offset="100%" stop-color="#003399"/>
+    </linearGradient>
+    <radialGradient id="packCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00ffcc"/>
+      <stop offset="100%" stop-color="#005577"/>
+    </radialGradient>
+    <filter id="dropShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="2" dy="5" stdDeviation="4" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#dropShadow)">
+    <!-- Back Thrusters / Backpack -->
+    <rect x="15" y="25" width="22" height="50" rx="8" fill="url(#suitArmor)" stroke="#444" stroke-width="2"/>
+    <rect x="18" y="30" width="16" height="40" rx="6" fill="#222"/>
+    <!-- Glowing core in pack -->
+    <circle cx="26" cy="50" r="6" fill="url(#packCore)"/>
+    <line x1="26" y1="35" x2="26" y2="40" stroke="#00ffcc" stroke-width="2" stroke-linecap="round"/>
+    <line x1="26" y1="60" x2="26" y2="65" stroke="#00ffcc" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Main Torso Armor -->
+    <path d="M 35 45 C 35 25, 70 25, 70 45 L 80 75 C 85 90, 20 90, 25 75 Z" fill="url(#suitArmor)" stroke="#333" stroke-width="2"/>
+    
+    <!-- Chest Plates & Mechanics -->
+    <path d="M 40 45 Q 52 50, 65 45 L 68 55 Q 52 65, 37 55 Z" fill="url(#blueTrim)" stroke="#222" stroke-width="1.5"/>
+    <circle cx="52" cy="70" r="8" fill="#333" stroke="#555" stroke-width="2"/>
+    <circle cx="52" cy="70" r="4" fill="#ff4400"/>
+    <rect x="35" y="80" width="35" height="6" rx="3" fill="#222"/>
+    
+    <!-- Shoulder Pads -->
+    <path d="M 32 40 Q 25 35, 30 55 Z" fill="url(#blueTrim)" stroke="#222" stroke-width="1"/>
+    <path d="M 73 40 Q 80 35, 75 55 Z" fill="url(#blueTrim)" stroke="#222" stroke-width="1"/>
+
+    <!-- Arms & Gloves -->
+    <path d="M 35 50 Q 15 65, 20 80" fill="none" stroke="url(#suitArmor)" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="20" cy="80" r="6" fill="#333"/> <!-- Hand L -->
+    
+    <path d="M 70 50 Q 90 65, 85 80" fill="none" stroke="url(#suitArmor)" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="85" cy="80" r="6" fill="#333"/> <!-- Hand R -->
+
+    <!-- Harpoon / Pump Weapon -->
+    <g transform="translate(60, 55) rotate(-15)">
+      <!-- Main Barrel -->
+      <rect x="15" y="10" width="35" height="12" rx="4" fill="#555" stroke="#222" stroke-width="2"/>
+      <rect x="20" y="12" width="25" height="8" fill="#888"/>
+      <!-- Air Chamber -->
+      <circle cx="25" cy="16" r="8" fill="url(#blueTrim)" stroke="#111" stroke-width="1"/>
+      <circle cx="25" cy="16" r="3" fill="#00ffff"/>
+      <!-- Nozzle -->
+      <polygon points="50,12 58,14 58,18 50,20" fill="#dddddd" stroke="#333" stroke-width="1"/>
+      <!-- Drill tip -->
+      <polygon points="58,14 66,16 58,18" fill="#ffaa00" stroke="#cc5500" stroke-width="1"/>
+    </g>
+
+    <!-- Helmet Base -->
+    <circle cx="52" cy="32" r="24" fill="url(#helmetGlow)" stroke="#333" stroke-width="2.5"/>
+    
+    <!-- Helmet Ear-pieces -->
+    <rect x="25" y="26" width="6" height="12" rx="2" fill="url(#blueTrim)" stroke="#222" stroke-width="1.5"/>
+    <rect x="73" y="26" width="6" height="12" rx="2" fill="url(#blueTrim)" stroke="#222" stroke-width="1.5"/>
+
+    <!-- Visor Frame -->
+    <path d="M 32 30 Q 52 16, 72 30 Q 78 44, 62 50 Q 52 53, 42 50 Q 26 44, 32 30 Z" fill="#222"/>
+
+    <!-- Glossy Visor -->
+    <path d="M 34 31 Q 52 18, 70 31 Q 75 42, 61 47 Q 52 50, 43 47 Q 29 42, 34 31 Z" fill="url(#visorReflect)"/>
+    
+    <!-- High-end Visor Reflections -->
+    <path d="M 38 29 Q 52 20, 66 29 Q 62 35, 52 35 Q 42 35, 38 29 Z" fill="#ffffff" opacity="0.6"/>
+    <ellipse cx="60" cy="26" rx="5" ry="2" fill="#ffffff" opacity="0.8" transform="rotate(-20 60 26)"/>
+    
+    <!-- Communication Antenna -->
+    <path d="M 48 8 L 48 2 M 56 8 L 56 4" stroke="#777" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="48" cy="2" r="2.5" fill="#ff3300"/>
+  </g>
+</svg>

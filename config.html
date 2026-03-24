@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dig Dug Config</title>
+    <link rel="stylesheet" href="styles/config.css">
+</head>
+<body>
+    <main class="config-layout">
+        <section class="config-card">
+            <h1>Dig Dug Game Settings</h1>
+            <p class="subtext">Changes are saved locally in this browser and applied on the next level or next new game.</p>
+
+            <form id="configForm" class="config-form">
+                <label>
+                    Starting Lives
+                    <input type="number" name="defaultLives" min="1" max="9" required>
+                </label>
+
+                <label>
+                    Enemy Speed Step Per Level
+                    <input type="number" name="levelEnemySpeedStep" min="0" max="3" step="0.05" required>
+                </label>
+
+                <label>
+                    Base Score Per Kill
+                    <input type="number" name="scoreBasePoints" min="10" max="10000" step="10" required>
+                </label>
+
+                <label>
+                    Score Depth Row Size
+                    <input type="number" name="scoreDepthRows" min="1" max="12" required>
+                </label>
+
+                <label>
+                    Level Intro Hold (ms)
+                    <input type="number" name="levelIntroHoldMs" min="0" max="20000" step="100" required>
+                </label>
+
+                <label>
+                    Level Intro Fade (ms)
+                    <input type="number" name="levelIntroFadeMs" min="0" max="5000" step="50" required>
+                </label>
+
+                <div class="buttons">
+                    <button type="submit">Save Settings</button>
+                    <button type="button" id="resetButton" class="secondary">Reset Defaults</button>
+                </div>
+            </form>
+
+            <p id="status" class="status" aria-live="polite"></p>
+            <a class="back-link" href="index.html">Back to Game</a>
+        </section>
+    </main>
+
+    <script type="module" src="src/admin/config-page.js"></script>
+</body>
+</html>

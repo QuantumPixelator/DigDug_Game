@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at 20% 20%, #34495e 0%, #1f2a36 50%, #121820 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #f4f6f8;
+}
+
+.config-layout {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.config-card {
+    width: min(560px, 100%);
+    background: rgba(15, 22, 30, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+h1 {
+    margin: 0 0 8px;
+    font-size: 1.6rem;
+}
+
+.subtext {
+    margin: 0 0 20px;
+    color: #b9c7d3;
+    line-height: 1.4;
+}
+
+.config-form {
+    display: grid;
+    gap: 14px;
+}
+
+label {
+    display: grid;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+input {
+    background: #0d141c;
+    border: 1px solid #3f5368;
+    border-radius: 8px;
+    color: #f4f6f8;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #2ecc71;
+    color: #082312;
+}
+
+button.secondary {
+    background: #95a5a6;
+    color: #152124;
+}
+
+.status {
+    min-height: 24px;
+    margin: 14px 0 6px;
+    color: #7ee2a8;
+}
+
+.back-link {
+    color: #9dd3ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
