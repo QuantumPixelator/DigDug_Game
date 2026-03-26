@@ -150,4 +150,24 @@ export class Player {
             this.harpoon.render(ctx);
         }
     }
+
+    moveLeft() {
+        this.direction = 'left';
+        this.state = 'walking';
+    }
+
+    moveRight() {
+        this.direction = 'right';
+        this.state = 'walking';
+    }
+
+    moveUp() {
+        this.direction = 'up';
+        this.state = 'walking';
+    }
+
+    moveDown() {
+        this.direction = 'down';
+        this.state = 'walking';
+    }
 }
