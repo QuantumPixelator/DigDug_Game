@@ -4,7 +4,8 @@ Welcome to my browser-based clone of the classic arcade game, Dig Dug!
 
 This project is a tribute to the Namco game, created entirely with vanilla JavaScript, HTML, and CSS.
 
-AI (Gemini 2.5) was used to generate the image files, and for taking one big script and splitting it into separate logical modules.
+## AI Use Disclosure
+AI (Gemini 2.5) was used to generate the images, audio, some debugging, and splitting one big file into logical modules.
 
 ## Screenshot
 
@@ -23,12 +24,20 @@ At the start of each level, a `Level X` intro card is shown for 5 seconds, then 
 ## Controls
 
 -   **Arrow Keys:** Move up, down, left, and right.
--   **Spacebar:** Shoot your harpoon and pump up enemies.
+-   **Spacebar / Tap:** Shoot your harpoon and pump up enemies.
+-   **Swipe Gestures:** Move in the respective direction.
 -   **P:** Pause/resume gameplay.
 -   **X:** Toggle monster freeze cheat.
 -   **J:** Debug shortcut to jump directly to Level 10.
 
-Have fun!
+## Touch Screen Support
+
+This game now supports touch screen controls for mobile and tablet devices:
+
+- **Swipe Left/Right/Up/Down:** Move your character in the respective direction.
+- **Tap:** Shoot your harpoon and pump up enemies.
+
+Touch controls work seamlessly alongside keyboard inputs.
 
 ## Run Locally (or on a server)
 
@@ -44,11 +53,8 @@ Have fun!
 - Changes are applied automatically on the next level start or next new game.
 
 ## Things To Do
- - Add sound effects
  - Create intro scene
- - Server-side High Score list
- - Better level and death visuals
- 
+ - Server-side High Score list 
 
 ## License
 
