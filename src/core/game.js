@@ -94,6 +94,16 @@ export class Game {
             this.isPlaying = true;
             this.resetLevel();
         }
+
+        if (this.input.state.left) {
+            this.player.moveLeft();
+        } else if (this.input.state.right) {
+            this.player.moveRight();
+        } else if (this.input.state.up) {
+            this.player.moveUp();
+        } else if (this.input.state.down) {
+            this.player.moveDown();
+        }
     }
 
     getTargetCountForLevel(level) {
