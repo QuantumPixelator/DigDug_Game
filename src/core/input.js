@@ -21,6 +21,7 @@ export class InputController {
         this.onTouchEnd = this.onTouchEnd.bind(this);
         this.touchStartX = null;
         this.touchStartY = null;
+        this.touchThreshold = 30; // More responsive threshold
     }
 
     onKeyDown(event) {
@@ -47,9 +48,21 @@ export class InputController {
     }
 
     onTouchStart(event) {
+        // Handle action button press
+        if (event.target.id === 'action-button') {
+            this.state.space = true;
+            return;
+        }
+
         const touch = event.touches[0];
         this.touchStartX = touch.clientX;
         this.touchStartY = touch.clientY;
+
+        // Reset movement states at the beginning of a new touch
+        this.state.left = false;
+        this.state.right = false;
+        this.state.up = false;
+        this.state.down = false;
     }
 
     onTouchMove(event) {
@@ -59,19 +72,19 @@ export class InputController {
         const deltaX = touch.clientX - this.touchStartX;
         const deltaY = touch.clientY - this.touchStartY;
 
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            if (deltaX > 30) {
+        if (Math.abs(deltaX) > Math.abs(deltaY)) { // Horizontal swipe
+            if (deltaX > this.touchThreshold) {
                 this.state.right = true;
                 this.state.left = false;
-            } else if (deltaX < -30) {
+            } else if (deltaX < -this.touchThreshold) {
                 this.state.left = true;
                 this.state.right = false;
             }
-        } else {
-            if (deltaY > 30) {
+        } else { // Vertical swipe
+            if (deltaY > this.touchThreshold) {
                 this.state.down = true;
                 this.state.up = false;
-            } else if (deltaY < -30) {
+            } else if (deltaY < -this.touchThreshold) {
                 this.state.up = true;
                 this.state.down = false;
             }
@@ -79,6 +92,11 @@ export class InputController {
     }
 
     onTouchEnd(event) {
+        // Handle action button release
+        if (this.state.space) {
+            this.state.space = false;
+        }
+        
         this.state.left = false;
         this.state.right = false;
         this.state.up = false;
@@ -116,9 +134,15 @@ export class InputController {
     attach() {
         this.target.addEventListener('keydown', this.onKeyDown);
         this.target.addEventListener('keyup', this.onKeyUp);
-        this.target.addEventListener('touchstart', this.onTouchStart);
-        this.target.addEventListener('touchmove', this.onTouchMove);
+        this.target.addEventListener('touchstart', this.onTouchStart, { passive: false });
+        this.target.addEventListener('touchmove', this.onTouchMove, { passive: false });
         this.target.addEventListener('touchend', this.onTouchEnd);
+
+        const actionButton = document.getElementById('action-button');
+        if (actionButton) {
+            actionButton.addEventListener('touchstart', this.onTouchStart, { passive: false });
+            actionButton.addEventListener('touchend', this.onTouchEnd);
+        }
     }
 
     detach() {
@@ -127,5 +151,12 @@ export class InputController {
         this.target.removeEventListener('touchstart', this.onTouchStart);
         this.target.removeEventListener('touchmove', this.onTouchMove);
         this.target.removeEventListener('touchend', this.onTouchEnd);
+
+        const actionButton = document.getElementById('action-button');
+        if (actionButton) {
+            actionButton.removeEventListener('touchstart', this.onTouchStart);
+            actionButton.removeEventListener('touchend', this.onTouchEnd);
+        }
     }
 }
+
