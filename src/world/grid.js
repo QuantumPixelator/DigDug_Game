@@ -2,6 +2,13 @@ export const GRID_WIDTH = 14;
 export const GRID_HEIGHT = 14;
 export const CELL_SIZE = 16;
 
+/** True when pos lies on a cell boundary (avoids float drift breaking modulo checks). */
+const GRID_ALIGN_EPS = 0.02;
+export function isAlignedToGridAxis(pos) {
+    const m = ((pos % CELL_SIZE) + CELL_SIZE) % CELL_SIZE;
+    return m < GRID_ALIGN_EPS || m > CELL_SIZE - GRID_ALIGN_EPS;
+}
+
 export class Grid {
     constructor({ rockCells = [], startTunnel = { x: 1, y: 1 } } = {}) {
         this.rocks = [];

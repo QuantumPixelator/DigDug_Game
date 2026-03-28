@@ -1,4 +1,4 @@
-import { CELL_SIZE, GRID_WIDTH, GRID_HEIGHT } from '../world/grid.js';
+import { CELL_SIZE, GRID_WIDTH, GRID_HEIGHT, isAlignedToGridAxis } from '../world/grid.js';
 import sprites from '../render/sprites.js';
 import { Harpoon } from './harpoon.js';
 
@@ -79,8 +79,14 @@ export class Player {
         let dy = 0;
         let isMoving = false;
 
-        const onGridX = this.x % CELL_SIZE === 0;
-        const onGridY = this.y % CELL_SIZE === 0;
+        const onGridX = isAlignedToGridAxis(this.x);
+        const onGridY = isAlignedToGridAxis(this.y);
+
+        const nudgeToward = (pos, target) => {
+            const delta = target - pos;
+            if (Math.abs(delta) <= this.speed) return delta;
+            return delta > 0 ? this.speed : -this.speed;
+        };
 
         if (intent) {
             let canTurn = false;
@@ -94,15 +100,27 @@ export class Player {
                 this.direction = intent;
             }
 
-            // Move in the current confirmed direction if valid
-            if (this.direction === 'left') {
-                if (this.y % CELL_SIZE === 0) { dx = -this.speed; isMoving = true; }
-            } else if (this.direction === 'right') {
-                if (this.y % CELL_SIZE === 0) { dx = this.speed; isMoving = true; }
-            } else if (this.direction === 'up') {
-                if (this.x % CELL_SIZE === 0) { dy = -this.speed; isMoving = true; }
-            } else if (this.direction === 'down') {
-                if (this.x % CELL_SIZE === 0) { dy = this.speed; isMoving = true; }
+            // Move along the lane, or slide onto a vertical/horizontal lane first (0.5px steps can stop mid-cell).
+            if (this.direction === 'left' || this.direction === 'right') {
+                if (onGridY) {
+                    dx = this.direction === 'left' ? -this.speed : this.speed;
+                    isMoving = true;
+                } else {
+                    const targetY = Math.round(this.y / CELL_SIZE) * CELL_SIZE;
+                    const clampedY = Math.max(0, Math.min(targetY, (GRID_HEIGHT - 1) * CELL_SIZE));
+                    dy = nudgeToward(this.y, clampedY);
+                    isMoving = true;
+                }
+            } else if (this.direction === 'up' || this.direction === 'down') {
+                if (onGridX) {
+                    dy = this.direction === 'up' ? -this.speed : this.speed;
+                    isMoving = true;
+                } else {
+                    const targetX = Math.round(this.x / CELL_SIZE) * CELL_SIZE;
+                    const clampedX = Math.max(0, Math.min(targetX, (GRID_WIDTH - 1) * CELL_SIZE));
+                    dx = nudgeToward(this.x, clampedX);
+                    isMoving = true;
+                }
             }
         }
 
