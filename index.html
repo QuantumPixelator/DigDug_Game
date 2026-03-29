@@ -2,19 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
     <title>Dig Dug</title>
     <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="styles/mobile.css">
 </head>
 <body>
     <div id="gameContainer">
-        <canvas id="gameCanvas" width="224" height="244"></canvas>
-        <button id="playButton">Play</button>
+        <canvas id="gameCanvas" width="224" height="244" aria-label="Game Canvas" tabindex="0"></canvas>
+        <button id="playButton" aria-label="Start Game">Play</button>
         <a id="configLink" href="config.html">Admin Config</a>
     </div>
-    <div id="touch-controls">
-        <div id="action-button"></div>
+    <div id="touch-controls" aria-label="Touch Controls" role="region">
+        <div id="action-button" aria-label="Fire/Action Button" role="button" tabindex="0">
+            <span style="font-size:2em;line-height:1;">&#128165;</span>
+        </div>
     </div>
     <script type="module" src="src/main.js"></script>
 </body>

@@ -65,22 +65,23 @@ export class InputController {
         this.state.down = false;
     }
 
-    onTouchMove(event) {
-        if (this.touchStartX === null || this.touchStartY === null) return;
+    onTouchStart(event) {
+        // Handle action button press
+        if (event.target.id === 'action-button') {
+            this.state.space = true;
+            event.target.classList.add('active');
+            return;
+        }
 
         const touch = event.touches[0];
-        const deltaX = touch.clientX - this.touchStartX;
-        const deltaY = touch.clientY - this.touchStartY;
-
-        if (Math.abs(deltaX) > Math.abs(deltaY)) { // Horizontal swipe
-            if (deltaX > this.touchThreshold) {
-                this.state.right = true;
-                this.state.left = false;
-            } else if (deltaX < -this.touchThreshold) {
-                this.state.left = true;
-                this.state.right = false;
-            }
-        } else { // Vertical swipe
+        this.touchStartX = touch.clientX;
+        this.touchStartY = touch.clientY;
+        // Reset movement states at the beginning of a new touch
+        this.state.left = false;
+        this.state.right = false;
+        this.state.up = false;
+        this.state.down = false;
+    }
             if (deltaY > this.touchThreshold) {
                 this.state.down = true;
                 this.state.up = false;
@@ -93,10 +94,12 @@ export class InputController {
 
     onTouchEnd(event) {
         // Handle action button release
+        if (event.target && event.target.id === 'action-button') {
+            event.target.classList.remove('active');
+        }
         if (this.state.space) {
             this.state.space = false;
         }
-        
         this.state.left = false;
         this.state.right = false;
         this.state.up = false;
